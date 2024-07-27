@@ -1,12 +1,12 @@
 # newest features used: FetchContent v3.11, FetchContent_MakeAvailable v3.14,
 #   CMAKE_FIND_PACKAGE_PREFER_CONFIG v3.15
-cmake_minimum_required(VERSION 3.16)
-
-# cmake 3.16-supplied FindSDL*.cmake modules are for SDL1.x, so to use SDL2 we
-#   need to supply our own find modules
+cmake_minimum_required(VERSION 3.15)
 
 include(FetchIfNotFound)
 
+# cmake-supplied FindSDL*.cmake modules (through v3.30 at least) are written
+#   for SDL1.x, and SDL2 has switched to preferring config mode, see:
+#   - https://wiki.libsdl.org/SDL2/README/cmake
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 # See https://packages.ubuntu.com/search?keywords=sdl2 for package versions
@@ -24,7 +24,6 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 #   2.28.3 8a5ba43d00252c6c8b33c9aa4f1048222955ab4d
 set(FP_OPTIONS
   2.0.16
-  CONFIG # looking for /usr/lib/$(gcc -dumpmachine)/cmake/SDL2/sdl2-config.cmake
   )
 # CMAKE_CACHE_ARGS not passed by FetchContent to ExternalProject_Add as documented in:
 #   https://cmake.org/cmake/help/v3.16/module/FetchContent.html#command:fetchcontent_declare
@@ -50,7 +49,6 @@ fetch_if_not_found(SDL2 "${FP_OPTIONS}" "${FC_OPTIONS}")
 #   2.6.3 6103316427a8479e5027e41ab9948bebfc1c3c19
 set(FP_OPTIONS
   2.0.4
-  CONFIG # looking for /usr/lib/$(gcc -dumpmachine)/cmake/SDL2_mixer/sdl2_mixer-config.cmake
   )
 set(FC_OPTIONS
   GIT_REPOSITORY https://github.com/libsdl-org/SDL_mixer.git
@@ -67,7 +65,6 @@ fetch_if_not_found(SDL2_mixer "${FP_OPTIONS}" "${FC_OPTIONS}")
 #   2.2.0 669e75b84632e2c6cc5c65974ec9e28052cb7a4e
 set(FP_OPTIONS
   2.0.1
-  CONFIG # looking for /usr/lib/$(gcc -dumpmachine)/cmake/SDL2_net/sdl2-net.cmake
   )
 set(FC_OPTIONS
   GIT_REPOSITORY https://github.com/libsdl-org/SDL_net.git
@@ -84,14 +81,13 @@ fetch_if_not_found(SDL2_net "${FP_OPTIONS}" "${FC_OPTIONS}")
 #   2.20.2 89d1692fd8fe91a679bb943d377bfbd709b52c23
 set(FP_OPTIONS
   2.0.15
-  CONFIG # looking for /usr/lib/$(gcc -dumpmachine)/cmake/SDL2_ttf/sdl2-ttf.cmake
   )
 set(FC_OPTIONS
   GIT_REPOSITORY https://github.com/libsdl-org/SDL_ttf.git
   GIT_TAG        89d1692fd8fe91a679bb943d377bfbd709b52c23 # 2.20.2
   )
 # If SDL2_ttf is built from source by FetchContent, we need to consider its
-#   CMakeLists.txt, and force it to build its dependencies from source as well.
+#   CMakeLists.txt, and force it to build its dependencies from source as well
 find_package(Harfbuzz QUIET)
 find_package(Freetype QUIET)
 if(NOT Freetype_FOUND OR NOT Harfbuzz_FOUND)
@@ -109,7 +105,6 @@ fetch_if_not_found(SDL2_ttf "${FP_OPTIONS}" "${FC_OPTIONS}")
 #   2.0.0 db0e4676d6f9f6a271747ae21f997c3743cd53e1
 set(FP_OPTIONS
   2.0.0
-  CONFIG # looking for /usr/lib/$(gcc -dumpmachine)/cmake/SDL2_rtf/sdl2-rtf.cmake
   )
 set(FC_OPTIONS
   GIT_REPOSITORY https://github.com/libsdl-org/SDL_rtf.git

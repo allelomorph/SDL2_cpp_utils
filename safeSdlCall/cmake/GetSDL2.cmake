@@ -1,12 +1,12 @@
 # newest features used: FetchContent v3.11, FetchContent_MakeAvailable v3.14,
 #   CMAKE_FIND_PACKAGE_PREFER_CONFIG v3.15
-cmake_minimum_required(VERSION 3.16)
-
-# cmake 3.16-supplied FindSDL*.cmake modules are for SDL1.x, so to use SDL2 we
-#   need to supply our own find modules
+cmake_minimum_required(VERSION 3.15)
 
 include(FetchIfNotFound)
 
+# cmake-supplied FindSDL*.cmake modules (through v3.30 at least) are written
+#   for SDL1.x, and SDL2 has switched to preferring config mode, see:
+#   - https://wiki.libsdl.org/SDL2/README/cmake
 set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 # See https://packages.ubuntu.com/search?keywords=sdl2 for package versions
@@ -24,7 +24,6 @@ set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 #   2.28.3 8a5ba43d00252c6c8b33c9aa4f1048222955ab4d
 set(FP_OPTIONS
   2.0.16
-  CONFIG # looking for /usr/lib/$(gcc -dumpmachine)/cmake/SDL2/sdl2-config.cmake
   )
 # CMAKE_CACHE_ARGS not passed by FetchContent to ExternalProject_Add as documented in:
 #   https://cmake.org/cmake/help/v3.16/module/FetchContent.html#command:fetchcontent_declare
