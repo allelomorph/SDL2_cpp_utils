@@ -23,13 +23,11 @@ if(NOT SDL2_FOUND AND
 endif()
 
 # Search for the SDL2_rtf include directory
-find_path(SDL2_RTF_INCLUDE_DIR
-  SDL_rtf.h
+find_path(SDL2_RTF_INCLUDE_DIR SDL_rtf.h
   PATH_SUFFIXES
     SDL2
     include/SDL2
     include
-  DOC "Path to directory containing SDL2_rtf headers"
 )
 
 if (SDL2_RTF_INCLUDE_DIR)
@@ -38,26 +36,17 @@ if (SDL2_RTF_INCLUDE_DIR)
   sdl_version_from_header(SDL_rtf.h)
 endif()
 
-# Search for the SDL2_rtf library
-if(CMAKE_SIZEOF_VOID_P EQUAL 8)
-  set(VC_LIB_PATH_SUFFIX lib/x64)
-else()
-  set(VC_LIB_PATH_SUFFIX lib/x86)
-endif()
-
-find_library(SDL2_RTF_LIBRARY
-  SDL2_rtf
+find_library(SDL2_RTF_LIBRARY SDL2_rtf
   PATH_SUFFIXES
     lib
-    ${VC_LIB_PATH_SUFFIX}
-  DOC "Path to directory containing SDL2_rtf library"
 )
-unset(VC_LIB_PATH_SUFFIX)
 
 set(SDL2_RTF_LIBRARIES ${SDL2_RTF_LIBRARY})
 set(SDL2_RTF_INCLUDE_DIRS ${SDL2_RTF_INCLUDE_DIR})
 
-include(FindPackageHandleStandardArgs)
+if(NOT COMMAND find_package_handle_standard_args)
+  include(FindPackageHandleStandardArgs)
+endif()
 find_package_handle_standard_args(SDL2_rtf
   REQUIRED_VARS
     SDL2_RTF_LIBRARIES
@@ -65,17 +54,6 @@ find_package_handle_standard_args(SDL2_rtf
   VERSION_VAR
     SDL2_RTF_VERSION
   )
-
-# In the case that find_package(SDL2_rtf) was called as part of FetchContent,
-#   and it is determined that it will instead be built from source, we need to
-#   consider SDL_rtf's CMakeLists.txt, and force it to build its dependencies
-#   from source as well.
-if(NOT SDL2_rtf_FOUND)
-  # SDL_rtf has no apparent vendored dependencies, and no option
-  #   SDL2RTF_VENDORED to override, see:
-  #   - https://github.com/libsdl-org/SDL_rtf/blob/1fed03f499736c2a21adcb0878d57f68f4e22bca/CMakeLists.txt
-  # set(SDL2RTF_VENDORED TRUE)
-endif()
 
 # TBD garnish with results of pkg-config, eg -D_REENTRANT
 # SDL2_rtf::SDL2_rtf matches target name if built from source with FetchContent
