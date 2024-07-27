@@ -1,6 +1,5 @@
 # newest features used: FetchContent v3.11, FetchContent_MakeAvailable v3.14
-# targeting cmake v3.16
-cmake_minimum_required(VERSION 3.14) #???
+cmake_minimum_required(VERSION 3.14)
 
 project(SafeSdlCall
   VERSION 1.5
@@ -10,7 +9,7 @@ project(SafeSdlCall
   )
 
 #set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
-#list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
+list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 
 # test for population first in case of use in parent project
 if(NOT cmake_utils_POPULATED)

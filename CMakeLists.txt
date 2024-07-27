@@ -1,9 +1,12 @@
-cmake_minimum_required(VERSION 3.16)
+# newest features used: FetchContent v3.11, FetchContent_MakeAvailable v3.14
+cmake_minimum_required(VERSION 3.14)
 
 project(SDL2_cpp_utils
   DESCRIPTION "Resources for C++ projects linking SDL2"
   LANGUAGES CXX
 )
+
+#set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # test for population first in case of use in parent project
 if(NOT cmake_utils_POPULATED)
