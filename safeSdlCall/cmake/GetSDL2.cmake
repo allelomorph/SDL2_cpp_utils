@@ -1,10 +1,13 @@
-# newest features used: FetchContent v3.11, FetchContent_MakeAvailable v3.14
+# newest features used: FetchContent v3.11, FetchContent_MakeAvailable v3.14,
+#   CMAKE_FIND_PACKAGE_PREFER_CONFIG v3.15
 cmake_minimum_required(VERSION 3.16)
 
 # cmake 3.16-supplied FindSDL*.cmake modules are for SDL1.x, so to use SDL2 we
 #   need to supply our own find modules
 
 include(FetchIfNotFound)
+
+set(CMAKE_FIND_PACKAGE_PREFER_CONFIG TRUE)
 
 # See https://packages.ubuntu.com/search?keywords=sdl2 for package versions
 # In all cases currently only considering SDL2 v2, not v3
@@ -17,10 +20,11 @@ include(FetchIfNotFound)
 #   2.0.16 25f9ed87ff6947d9576fc9d79dee0784e638ac58
 # - release matching Ubuntu 22.04 LTS package:
 #   2.0.20 b424665e0899769b200231ba943353a5fee1b6b6
-# - current release at last script update:
-#   2.28.5 15ead9a40d09a1eb9972215cceac2bf29c9b77f6
+# - release matching Ubuntu 23.10 package:
+#   2.28.3 8a5ba43d00252c6c8b33c9aa4f1048222955ab4d
 set(FP_OPTIONS
   2.0.16
+  CONFIG # looking for /usr/lib/$(gcc -dumpmachine)/cmake/SDL2/sdl2-config.cmake
   )
 # CMAKE_CACHE_ARGS not passed by FetchContent to ExternalProject_Add as documented in:
 #   https://cmake.org/cmake/help/v3.16/module/FetchContent.html#command:fetchcontent_declare
@@ -30,6 +34,6 @@ set(FP_OPTIONS
 set(SDL_STATIC OFF CACHE BOOL "Toggles building of SDL2 static library")
 set(FC_OPTIONS
   GIT_REPOSITORY https://github.com/libsdl-org/SDL.git
-  GIT_TAG        25f9ed87ff6947d9576fc9d79dee0784e638ac58 # 2.0.16
-  )
+  GIT_TAG        8a5ba43d00252c6c8b33c9aa4f1048222955ab4d  # 2.28.3
+)
 fetch_if_not_found(SDL2 "${FP_OPTIONS}" "${FC_OPTIONS}")
