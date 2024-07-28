@@ -1,5 +1,6 @@
 cmake_minimum_required(VERSION 3.16)
 
+include(GetSDL2Full)
 
 add_library(sdl2_smart_ptrs_obj OBJECT
   sdl2_smart_ptr.cc
