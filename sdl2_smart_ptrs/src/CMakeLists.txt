@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
-include(GetSDL2Full)
+include(GetSDL2)
+include(GetSDL2_mixer)
+include(GetSDL2_net)
+include(GetSDL2_ttf)
+include(GetSDL2_rtf)  # requires SDL2_ttf to be defined first
+
 
 add_library(sdl2_smart_ptrs_obj OBJECT
   sdl2_smart_ptr.cc
@@ -46,7 +51,6 @@ set_target_properties(sdl2_smart_ptrs_shared PROPERTIES
   LIBRARY_OUTPUT_NAME sdl2_smart_ptrs
   )
 
-#[[
 include(PrintTargetProperties)
 foreach(target
     SDL2
@@ -69,4 +73,3 @@ foreach(target
     )
   print_target_properties(${target})
 endforeach()
-]]

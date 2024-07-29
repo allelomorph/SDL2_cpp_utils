@@ -13,5 +13,6 @@ list(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
 include(Getcmake_utils)
 
 include(PreventInSourceBuild)
+include(IncludeOnce)
 
 add_subdirectory(src)

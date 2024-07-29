@@ -12,5 +12,13 @@ include(Getcmake_utils)
 
 include(PreventInSourceBuild)
 
+# Establish all SDL2 targets once here to speed config/build of subdirectories
+include(GetSDL2)
+include(GetSDL2_image)
+include(GetSDL2_mixer)
+include(GetSDL2_net)
+include(GetSDL2_ttf)
+include(GetSDL2_rtf)  # requires SDL2_ttf to be defined first
+
 add_subdirectory(safeSdlCall)
 add_subdirectory(sdl2_smart_ptrs)
