@@ -1,7 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-#include(GetSDL2)
-#messsage("SDL2_VERSION: ${SDL2_VERSION}")
+include(GetSDL2)
 
 add_library(safeSdlCall INTERFACE)
 target_include_directories(safeSdlCall INTERFACE

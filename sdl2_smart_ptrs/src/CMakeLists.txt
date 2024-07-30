@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.10)
 
 include(GetSDL2)
 include(GetSDL2_mixer)
@@ -6,6 +6,9 @@ include(GetSDL2_net)
 include(GetSDL2_ttf)
 include(GetSDL2_rtf)  # requires SDL2_ttf to be defined first
 
+if(NOT COMMAND set_strict_compile_options)
+  include(SetStrictCompileOptions)
+endif()
 
 add_library(sdl2_smart_ptrs_obj OBJECT
   sdl2_smart_ptr.cc
@@ -20,7 +23,6 @@ set_target_properties(sdl2_smart_ptrs_obj PROPERTIES
   CXX_EXTENSIONS OFF
   POSITION_INDEPENDENT_CODE ON
   )
-include(SetStrictCompileOptions)
 set_strict_compile_options(sdl2_smart_ptrs_obj)
 target_include_directories(sdl2_smart_ptrs_obj PRIVATE
   "${CMAKE_CURRENT_SOURCE_DIR}/include"
@@ -51,6 +53,7 @@ set_target_properties(sdl2_smart_ptrs_shared PROPERTIES
   LIBRARY_OUTPUT_NAME sdl2_smart_ptrs
   )
 
+#[[
 include(PrintTargetProperties)
 foreach(target
     SDL2
@@ -73,3 +76,4 @@ foreach(target
     )
   print_target_properties(${target})
 endforeach()
+]]
