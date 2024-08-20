@@ -17,6 +17,8 @@
 
 #include <cassert>
 
+#include <functional>    // function
+#include <stdexcept>     // runtime_error
 #include <string_view>
 #include <sstream>
 
