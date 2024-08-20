@@ -1,7 +1,7 @@
 # newest features used: FetchContent v3.11, FetchContent_MakeAvailable v3.14
 cmake_minimum_required(VERSION 3.14)
 
-project(SafeSdlCall
+project(safeSdlCall
   VERSION 1.5
   DESCRIPTION "Templated C++ wrapper for SDL2 function calls; throws failure \
     return values as exceptions"
