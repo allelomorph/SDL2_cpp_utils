@@ -11,9 +11,9 @@
  * SDL_ttf.h:#define TTF_GetError    SDL_GetError
  * ```
  */
-#include "SDL.h"       // SDL_GetError
+#include <SDL.h>       // SDL_GetError
 // Except SDL_net, which defines its own wrapper for SDL_GetError
-#include "SDL_net.h"   // SDLNet_GetError
+#include <SDL_net.h>   // SDLNet_GetError
 
 #include <cassert>
 
@@ -58,10 +58,15 @@ ReturnType safeSdlCall(FuncType&& sdl_func,
     if (is_failure(retval)) {
         std::ostringstream msg;
         msg << sdl_func_name << ": ";
+        std::string_view sdl_error;
         if (sdl_func_name.find("SDLNet_") == 0)
-            msg << SDLNet_GetError();
+            sdl_error = SDLNet_GetError();
         else
-            msg << SDL_GetError();
+            sdl_error = SDL_GetError();
+        if (sdl_error.size() == 0) {
+            sdl_error = "failure without setting SDL error";
+        }
+        msg << sdl_error;
         // log before throw in case exception is caught elsewhere
         SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "%s", msg.str().c_str());
         throw std::runtime_error(msg.str());
