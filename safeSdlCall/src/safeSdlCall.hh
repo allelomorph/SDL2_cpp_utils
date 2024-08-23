@@ -17,6 +17,7 @@
 
 #include <cassert>
 
+#include <type_traits>   // enable_if, is_void
 #include <functional>    // function
 #include <stdexcept>     // runtime_error
 #include <string_view>
@@ -38,14 +39,15 @@ class SdlRetTest : public std::function<bool(const ReturnType)> {};
  *   string to determine error return, as several errors may have occured between
  *   the function call and SDL_GetError. This leaves us without a means to
  *   check functions that return void, but also can set errors, such as
- *   SDL_DestroyTexture. So a void return overload similar to safeLibcCall would
- *   be of no use here.
+ *   SDL_DestroyTexture. So a void return overload would be of no use here.
  */
 template<typename FuncType, typename ReturnType, typename ...ParamTypes>
-ReturnType safeSdlCall(FuncType&& sdl_func,
-                       const std::string_view& sdl_func_name,
-                       const SdlRetTest<ReturnType>& is_failure,
-                       ParamTypes ...params) {
+auto safeSdlCall(FuncType&& sdl_func,
+                 const std::string_view& sdl_func_name,
+                 const SdlRetTest<ReturnType>& is_failure,
+                 ParamTypes ...params) ->
+    std::enable_if_t<!std::is_void_v<ReturnType>, ReturnType>
+{
     /*
     assert(sdl_func_name.find("SDL_") == 0 ||
            sdl_func_name.find("IMG_") == 0 ||
