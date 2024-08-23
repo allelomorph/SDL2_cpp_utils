@@ -28,8 +28,9 @@
  * If performace becomes an issue an alias to a function pointer would work,
  *   but at the cost of being able to pass in functors. For comparison of
  *   std::function vs function pointers: https://stackoverflow.com/q/25848690
- * Note that when instantiating this type with a lambda, ReturnType must
- *   be passed as a template parameter to allow its deduction in safeSdlCall
+ * Note that when instantiating this type with a lambda, function or functor,
+ *   ReturnType must be passed as a template parameter to allow its deduction
+ *   in safeSdlCall
  */
 template<typename ReturnType>
 class SdlRetTest : public std::function<bool(const ReturnType)> {};
