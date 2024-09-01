@@ -2,7 +2,6 @@
 cmake_minimum_required(VERSION 3.14)
 
 project(sdl2_smart_ptrs
-  VERSION 1.0
   DESCRIPTION "C++ smart pointer wrappers for structs allocated by SDL2 and \
 its auxillary libraries"
   LANGUAGES CXX
@@ -15,3 +14,6 @@ include(Getcmake_utils)
 include(PreventInSourceBuild)
 
 add_subdirectory(src)
+
+enable_testing()
+add_subdirectory(test)
