@@ -52,28 +52,3 @@ target_include_directories(sdl2_smart_ptrs_shared INTERFACE
 set_target_properties(sdl2_smart_ptrs_shared PROPERTIES
   LIBRARY_OUTPUT_NAME sdl2_smart_ptrs
   )
-
-#[[
-include(PrintTargetProperties)
-foreach(target
-    SDL2
-    SDL2main
-    SDL2::SDL2
-    SDL2::SDL2main
-    SDL2_image
-    SDL2_image::SDL2_image
-    SDL2_mixer
-    SDL2_mixer::SDL2_mixer
-    SDL2_net
-    SDL2_net::SDL2_net
-    SDL2_rtf
-    SDL2_rtf::SDL2_rtf
-    SDL2_ttf
-    SDL2_ttf::SDL2_ttf
-    sdl2_smart_ptrs_object
-    sdl2_smart_ptrs_static
-    sdl2_smart_ptrs_shared
-    )
-  print_target_properties(${target})
-endforeach()
-]]
