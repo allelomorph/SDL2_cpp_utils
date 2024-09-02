@@ -12,7 +12,8 @@ include(Getcmake_utils)
 
 include(PreventInSourceBuild)
 
-# Establish all SDL2 targets once here to speed config/build of subdirectories
+# Establish shared dependencies once here to speed config/build of subdirectories
+include(GetCatch2)
 include(GetSDL2)
 include(GetSDL2_image)
 include(GetSDL2_mixer)

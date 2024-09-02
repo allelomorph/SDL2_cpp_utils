@@ -13,23 +13,23 @@ if(NOT COMMAND set_strict_compile_options)
   include(SetStrictCompileOptions)
 endif()
 
-add_executable(unit_tests
+add_executable(safeSdlCall_tests
   safeSdlCall_test.cc
 )
-set_target_properties(unit_tests PROPERTIES
+set_target_properties(safeSdlCall_tests PROPERTIES
   CXX_STANDARD 17
   CXX_STANDARD_REQUIRED ON
   CXX_EXTENSIONS OFF
   POSITION_INDEPENDENT_CODE ON
   )
-set_strict_compile_options(unit_tests)
-target_compile_definitions(unit_tests
+set_strict_compile_options(safeSdlCall_tests)
+target_compile_definitions(safeSdlCall_tests
   PUBLIC
     _CATCH_VERSION_MAJOR=${_CATCH_VERSION_MAJOR}
     # quotes are passed into macros (expecting EXAMPLE_DATA_DIR to be string literal)
     EXAMPLE_DATA_DIR="${PROJECT_SOURCE_DIR}/test/example_data/"
   )
-target_link_libraries(unit_tests
+target_link_libraries(safeSdlCall_tests
   PRIVATE
     safeSdlCall
     Catch2::Catch2WithMain
@@ -61,14 +61,14 @@ set(MEMORYCHECK_COMMAND_OPTIONS
 
 include(CTest) # calls enable_testing(), sets up DartConfiguration.tcl
 include(Catch)
-catch_discover_tests(unit_tests
+catch_discover_tests(safeSdlCall_tests
   # each discovered test will be run as a separate process, and the Catch2 exit
   #   code for all tests skipped in a process is 4, see:
   #   - https://github.com/catchorg/Catch2/blob/v3.4.0/src/catch2/catch_session.cpp#L348
   PROPERTIES SKIP_RETURN_CODE 4
 )
 
-add_custom_command(TARGET unit_tests POST_BUILD
+add_custom_command(TARGET safeSdlCall_tests POST_BUILD
   # cmake auto concatenates and space delimits quoted strings in this context
   COMMAND
     "ctest"
