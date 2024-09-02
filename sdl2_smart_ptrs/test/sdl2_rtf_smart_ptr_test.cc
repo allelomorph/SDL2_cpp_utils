@@ -38,7 +38,7 @@ TEST_CASE("SDL_rtf allocations: RTF_Context",
         FAIL(collectErrorQuitSdlTtf("TTF_Init"));
     }
 
-        SDL_Window* window {
+    SDL_Window* window {
         SDL_CreateWindow("test_window", 0, 0, 1, 1, SDL_WINDOW_HIDDEN)
     };
     if (window == nullptr) {
