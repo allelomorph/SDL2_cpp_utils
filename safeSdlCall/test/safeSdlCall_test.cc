@@ -14,6 +14,26 @@
 #include <SDL_ttf.h>
 #include <SDL_rtf.h>
 
+#include <string>
+
+
+static std::string collectErrorQuitSdl(const std::string& func_name,
+                                       void (*lib_quit_func)() = nullptr) {
+    std::string err { SDL_GetError() };
+    SDL_ClearError();
+    if (err.size() == 0) {
+        err = "failure without setting SDL error";
+    }
+    if (lib_quit_func != nullptr) {
+        lib_quit_func();
+    }
+    SDL_Quit();
+    return func_name + ": " + err;
+}
+
+static bool sdl_getwindowid_test_func(const Uint32 ret) {
+    return (ret == 0);
+}
 
 #if (CATCH_VERSION_MAJOR > 2)
 using Catch::Matchers::Message;
@@ -21,22 +41,12 @@ using Catch::Matchers::Message;
 using Catch::Message;
 #endif
 
-
-static bool sdl_getwindowid_test_func(const Uint32 ret) {
-    return (ret == 0);
-}
-
 TEST_CASE("SDL core function",
     "[safeSdlCall][SDL2][core]")
 {
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            SDL_Init, "SDL_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            },
-            SDL_INIT_VIDEO)
-        );
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        FAIL(collectErrorQuitSdl("SDL_Init"));
+    }
 
     auto sdl_getwindowid_test_lambda {
         [](const Uint32 ret){ return (ret == 0); }
@@ -44,15 +54,12 @@ TEST_CASE("SDL core function",
 
     SECTION("Success")
     {
-        SDL_Window* window;
-        REQUIRE_NOTHROW(
-            window = safeSdlCall(
-                SDL_CreateWindow, "SDL_CreateWindow",
-                SdlRetTest<SDL_Window*> {
-                    [](const SDL_Window* ret){ return (ret == nullptr); }
-                },
-                "sdl_test_window", 0, 0, 1, 1, SDL_WINDOW_HIDDEN)
-            );
+        SDL_Window* window {
+            SDL_CreateWindow("sdl_test_window", 0, 0, 1, 1, SDL_WINDOW_HIDDEN)
+        };
+        if (window == nullptr) {
+            FAIL(collectErrorQuitSdl("SDL_CreateWindow"));
+        }
 
         SECTION("detected by function") {
             REQUIRE_NOTHROW(
@@ -109,22 +116,13 @@ TEST_CASE("SDL core function",
 TEST_CASE("SDL_image function",
     "[safeSdlCall][SDL2][SDL_image]")
 {
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            SDL_Init, "SDL_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            },
-            SDL_INIT_VIDEO)
-        );
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            IMG_Init, "IMG_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != IMG_INIT_JPG); }
-            },
-            IMG_INIT_JPG)
-        );
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        FAIL(collectErrorQuitSdl("SDL_Init"));
+    }
+
+    if (IMG_Init(IMG_INIT_JPG) != IMG_INIT_JPG) {
+        FAIL(collectErrorQuitSdl("SDL_Init", IMG_Quit));
+    }
 
     SdlRetTest<SDL_Surface*> img_load_test {
         [](const SDL_Surface* ret){ return (ret == nullptr); }
@@ -166,30 +164,17 @@ TEST_CASE("SDL_image function",
 TEST_CASE("SDL_mixer function",
     "[safeSdlCall][SDL2][SDL_mixer]")
 {
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            SDL_Init, "SDL_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            },
-            SDL_INIT_VIDEO | SDL_INIT_AUDIO)
-        );
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            Mix_Init, "Mix_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != MIX_INIT_MP3); }
-            },
-            MIX_INIT_MP3)
-        );
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            Mix_OpenAudio, "Mix_OpenAudio",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            },
-            44100, MIX_DEFAULT_FORMAT, 2, 2048)
-        );
+    if (SDL_Init(SDL_INIT_AUDIO) != 0) {
+        SKIP(collectErrorQuitSdl("SDL_Init"));
+    }
+
+    if (Mix_Init(MIX_INIT_MP3) != MIX_INIT_MP3) {
+        FAIL(collectErrorQuitSdl("Mix_Init", Mix_Quit));
+    }
+
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0) {
+        SKIP(collectErrorQuitSdl("Mix_OpenAudio", Mix_Quit));
+    }
 
     SdlRetTest<Mix_Music*> mix_loadmus_test {
         [](const Mix_Music* ret){ return (ret == nullptr); }
@@ -231,21 +216,13 @@ TEST_CASE("SDL_mixer function",
 TEST_CASE("SDL_ttf function",
     "[safeSdlCall][SDL2][SDL_ttf]")
 {
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            SDL_Init, "SDL_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            },
-            SDL_INIT_VIDEO)
-        );
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            TTF_Init, "TTF_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            } )
-        );
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        FAIL(collectErrorQuitSdl("SDL_Init"));
+    }
+
+    if (TTF_Init() != 0) {
+        FAIL(collectErrorQuitSdl("TTF_Init", TTF_Quit));
+    }
 
     SdlRetTest<TTF_Font*> ttf_openfont_test {
         [](const TTF_Font* ret){ return (ret == nullptr); }
@@ -300,46 +277,43 @@ TEST_CASE("SDL_ttf function",
 TEST_CASE("SDL_rtf function",
     "[safeSdlCall][SDL2][SDL_rtf]")
 {
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            SDL_Init, "SDL_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            },
-            SDL_INIT_VIDEO)
-        );
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            TTF_Init, "TTF_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            } )
-        );
-    SDL_Window* window;
-    SDL_Renderer* renderer;
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            SDL_CreateWindowAndRenderer, "SDL_CreateWindowAndRenderer",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            },
-            1, 1, SDL_WINDOW_HIDDEN, &window, &renderer)
-        );
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        FAIL(collectErrorQuitSdl("SDL_Init"));
+    }
+
+    if (TTF_Init() != 0) {
+        FAIL(collectErrorQuitSdl("TTF_Init", TTF_Quit));
+    }
+
+    SDL_Window* window {
+        SDL_CreateWindow("test_window", 0, 0, 1, 1, SDL_WINDOW_HIDDEN)
+    };
+    if (window == nullptr) {
+        FAIL(collectErrorQuitSdl("SDL_CreateWindow", TTF_Quit));
+    }
+
+    SDL_Renderer* renderer {
+        SDL_CreateRenderer(window, -1, 0)
+    };
+    if (renderer == nullptr) {
+        SDL_DestroyWindow(window);
+        FAIL(collectErrorQuitSdl("SDL_CreateRenderer", TTF_Quit));
+    }
+
+    RTF_FontEngine font_engine {};
+    font_engine.version = RTF_FONT_ENGINE_VERSION;
 
     SdlRetTest<RTF_Context*> rtf_createcontext_test {
         [](const RTF_Context* ret){ return (ret == nullptr); }
     };
 
-    RTF_FontEngine rtf_font_engine;
-
     SECTION("Success")
     {
-        RTF_Context* rtf_context;
-        rtf_font_engine.version = RTF_FONT_ENGINE_VERSION;
+        RTF_Context* rtf_context {};
         REQUIRE_NOTHROW(
             (rtf_context = safeSdlCall(
                 RTF_CreateContext, "RTF_CreateContext", rtf_createcontext_test,
-                renderer, &rtf_font_engine
+                renderer, &font_engine
                 )) != nullptr
             );
         RTF_FreeContext(rtf_context);
@@ -348,11 +322,11 @@ TEST_CASE("SDL_rtf function",
     {
         SECTION("with SDL error set")
         {
-            rtf_font_engine.version = 0;
+            font_engine.version = 0;
             REQUIRE_THROWS_MATCHES(
                 safeSdlCall(
                     RTF_CreateContext, "RTF_CreateContext", rtf_createcontext_test,
-                    renderer, &rtf_font_engine
+                    renderer, &font_engine
                     ),
                 std::runtime_error,
                 Message("RTF_CreateContext: Unknown font engine version")
@@ -372,29 +346,22 @@ TEST_CASE("SDL_rtf function",
 TEST_CASE("SDL_net function",
     "[safeSdlCall][SDL2][SDL_net]")
 {
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            SDL_Init, "SDL_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            },
-            SDL_INIT_VIDEO)
-        );
-    REQUIRE_NOTHROW(
-        safeSdlCall(
-            SDLNet_Init, "SDLNet_Init",
-            SdlRetTest<int> {
-                [](const int ret){ return (ret != 0); }
-            } )
-        );
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        FAIL(collectErrorQuitSdl("SDL_Init"));
+    }
+
+    if (SDLNet_Init() != 0) {
+        FAIL(collectErrorQuitSdl("SDLNet_Init", SDLNet_Quit));
+    }
 
     SdlRetTest<int> sdlnet_resolvehost_test {
         [](const int ret){ return (ret == -1); }
     };
 
+    IPaddress address;
+
     SECTION("Success")
     {
-        IPaddress address;
         REQUIRE_NOTHROW(
             safeSdlCall(
                 SDLNet_ResolveHost, "SDLNet_ResolveHost", sdlnet_resolvehost_test,
@@ -404,21 +371,27 @@ TEST_CASE("SDL_net function",
     }
     SECTION("Failure")
     {
-        // SECTION("with SDL error set")
-        // {
-        //     // TBD: SDLNet_ResolveHost has no nullptr checks for address, need alternative test
-        //     REQUIRE_THROWS_MATCHES(
-        //         safeSdlCall(
-        //             SDLNet_ResolveHost, "SDLNet_ResolveHost", sdlnet_resolvehost_test,
-        //             nullptr, "", 0
-        //             ) == -1,
-        //         std::runtime_error,
-        //         Message("SDLNet_ResolveHost: ")
-        //         );
-        // }
+        SECTION("with SDL error set")
+        {
+            if (SDLNet_ResolveHost(&address, "localhost", 0) != 0) {
+                FAIL(collectErrorQuitSdl("SDLNet_ResolveHost", SDLNet_Quit));
+            }
+
+            SdlRetTest<TCPsocket> sdlnet_tcp_open_test {
+                [](const TCPsocket ret){ return (ret == nullptr); },
+            };
+
+            REQUIRE_THROWS_MATCHES(
+                safeSdlCall(
+                    SDLNet_TCP_Open, "SDLNet_TCP_Open", sdlnet_tcp_open_test,
+                    &address
+                    ) == nullptr,
+                std::runtime_error,
+                Message("SDLNet_TCP_Open: Couldn't connect to remote host")
+                );
+        }
         SECTION("with no SDL error set")
         {
-            IPaddress address;
             REQUIRE_THROWS_MATCHES(
                 safeSdlCall(
                     SDLNet_ResolveHost, "SDLNet_ResolveHost", sdlnet_resolvehost_test,
