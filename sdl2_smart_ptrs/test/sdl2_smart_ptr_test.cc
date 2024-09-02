@@ -1,8 +1,6 @@
 #if (_CATCH_VERSION_MAJOR == 3)
   #include <catch2/catch_version_macros.hpp>                     // CATCH_VERSION_MAJOR
   #include <catch2/catch_test_macros.hpp>                        // TEST_CASE, SECTION, REQUIRE
-  #include <catch2/matchers/catch_matchers.hpp>                  // REQUIRES_*THROW*
-  #include <catch2/matchers/catch_matchers_exception.hpp>        // Catch::Matchers::Message
 #elif (_CATCH_VERSION_MAJOR == 2)
   #include <catch2/catch.hpp>
 #endif
@@ -14,7 +12,7 @@
 #include <string>
 
 
-std::string collectErrorQuitSdl(const std::string& func_name) {
+static std::string collectErrorQuitSdl(const std::string& func_name) {
     std::string err { SDL_GetError() };
     SDL_ClearError();
     if (err.size() == 0) {
@@ -24,19 +22,12 @@ std::string collectErrorQuitSdl(const std::string& func_name) {
     return func_name + ": " + err;
 }
 
-#if (CATCH_VERSION_MAJOR > 2)
-using Catch::Matchers::Message;
-#else
-using Catch::Message;
-#endif
-
 using namespace sdl2_smart_ptr;
 
 TEST_CASE("SDL core allocations: SDL_Cursor",
     "[sdl2_smart_ptr][SDL2][core][SDL_Cursor]")
 {
-    int init_ret { SDL_Init(SDL_INIT_VIDEO) };
-    if (init_ret != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         FAIL(collectErrorQuitSdl("SDL_Init"));
     }
 
@@ -76,8 +67,7 @@ TEST_CASE("SDL core allocations: SDL_Cursor",
 TEST_CASE("SDL core allocations: SDL_cond",
     "[sdl2_smart_ptr][SDL2][core][SDL_cond]")
 {
-    int init_ret { SDL_Init(SDL_INIT_VIDEO) };
-    if (init_ret != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         FAIL(collectErrorQuitSdl("SDL_Init"));
     }
 
@@ -117,8 +107,7 @@ TEST_CASE("SDL core allocations: SDL_cond",
 TEST_CASE("SDL core allocations: SDL_mutex",
     "[sdl2_smart_ptr][SDL2][core][SDL_mutex]")
 {
-    int init_ret { SDL_Init(SDL_INIT_VIDEO) };
-    if (init_ret != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         FAIL(collectErrorQuitSdl("SDL_Init"));
     }
 
@@ -158,8 +147,7 @@ TEST_CASE("SDL core allocations: SDL_mutex",
 TEST_CASE("SDL core allocations: SDL_Renderer",
     "[sdl2_smart_ptr][SDL2][core][SDL_Renderer]")
 {
-    int init_ret { SDL_Init(SDL_INIT_VIDEO) };
-    if (init_ret != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         FAIL(collectErrorQuitSdl("SDL_Init"));
     }
 
@@ -208,8 +196,7 @@ TEST_CASE("SDL core allocations: SDL_Renderer",
 TEST_CASE("SDL core allocations: SDL_sem",
     "[sdl2_smart_ptr][SDL2][core][SDL_sem]")
 {
-    int init_ret { SDL_Init(SDL_INIT_VIDEO) };
-    if (init_ret != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         FAIL(collectErrorQuitSdl("SDL_Init"));
     }
 
@@ -249,8 +236,7 @@ TEST_CASE("SDL core allocations: SDL_sem",
 TEST_CASE("SDL core allocations: SDL_Surface",
     "[sdl2_smart_ptr][SDL2][core][SDL_Surface]")
 {
-    int init_ret { SDL_Init(SDL_INIT_VIDEO) };
-    if (init_ret != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         FAIL(collectErrorQuitSdl("SDL_Init"));
     }
 
@@ -290,8 +276,7 @@ TEST_CASE("SDL core allocations: SDL_Surface",
 TEST_CASE("SDL core allocations: SDL_Texture",
     "[sdl2_smart_ptr][SDL2][core][SDL_Texture]")
 {
-    int init_ret { SDL_Init(SDL_INIT_VIDEO) };
-    if (init_ret != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         FAIL(collectErrorQuitSdl("SDL_Init"));
     }
 
@@ -351,8 +336,7 @@ TEST_CASE("SDL core allocations: SDL_Texture",
 TEST_CASE("SDL core allocations: SDL_Window",
     "[sdl2_smart_ptr][SDL2][core][SDL_Window]")
 {
-    int init_ret { SDL_Init(SDL_INIT_VIDEO) };
-    if (init_ret != 0) {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         FAIL(collectErrorQuitSdl("SDL_Init"));
     }
 
