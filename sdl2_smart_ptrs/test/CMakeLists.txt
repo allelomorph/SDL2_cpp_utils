@@ -51,7 +51,10 @@ target_link_libraries(sdl2_smart_ptr_tests
 #   an exit code of 0-255 (unlikely to be 255 failed cases in one test)
 set(MEMORYCHECK_COMMAND_OPTIONS
     "-q --tool=memcheck --leak-check=yes --show-reachable=yes --num-callers=50 \
---error-exitcode=255"
+--error-exitcode=255 --gen-suppressions=all"
+)
+set(MEMORYCHECK_SUPPRESSIONS_FILE
+  ${CMAKE_CURRENT_LIST_DIR}/SDL2.supp
 )
 
 include(CTest) # calls enable_testing(), sets up DartConfiguration.tcl

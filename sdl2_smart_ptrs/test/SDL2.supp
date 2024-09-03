@@ -1,0 +1,166 @@
+#
+#
+# SDL core suppressions
+#
+#
+
+# _dl_init part of normal GNU startup of dynamically linked process, see:
+#   https://www.gnu.org/software/hurd/glibc/startup.html
+{
+   _dl_init_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_dl_init
+   ...
+}
+
+# SDL2 use of XSetLocaleModifiers, see:
+#   https://github.com/libsdl-org/SDL/blob/release-2.28.3/src/video/x11/SDL_x11keyboard.c#L174
+#   https://linux.die.net/man/3/xsupportslocale (re XSetLocaleModifiers:)
+#     "The returned modifiers string is owned by Xlib and should not be modified
+#     or freed by the client. It may be freed by Xlib after the current locale
+#     or modifiers are changed. Until freed, it will not be modified by Xlib."
+{
+   XSetLocaleModifiers_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XSetLocaleModifiers
+   ...
+}
+
+# SDL2 use of XOpenIM (X11_XOpenIM,) see:
+#   https://github.com/libsdl-org/SDL/blob/release-2.28.3/src/video/x11/SDL_x11sym.h#L202
+#   https://github.com/libsdl-org/SDL/blob/release-2.28.3/src/video/x11/SDL_x11keyboard.c#L208
+#   https://www.x.org/releases/current/doc/man/man3/XOpenIM.3.xhtml
+{
+   _XimOpenIM_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_XimOpenIM
+   ...
+}
+
+# SDL2 leaves D-Bus open, see:
+#   https://github.com/libsdl-org/SDL/issues/9487#issuecomment-2045852572
+#   https://www.freedesktop.org/wiki/Software/dbus/
+# SDL 2.30.0+ can be set to close D-Bus with dbus_shutdown() by defining
+#   SDL_HINT_SHUTDOWN_DBUS_ON_QUIT to 1, but this should only be done during
+#   debugging to isolate memory leaks, see:
+#   https://wiki.libsdl.org/SDL2/SDL_HINT_SHUTDOWN_DBUS_ON_QUIT
+{
+   D-Bus_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*libdbus*
+   ...
+}
+
+# X11_DeleteDevice -> ... -> XCloseDisplay -> ... -> dlclose, which may not
+#   deallocate its error strings, see:
+#   https://github.com/libsdl-org/SDL/blob/release-2.28.3/src/video/x11/SDL_x11sym.h#L202
+#   https://linux.die.net/man/3/xclosedisplay
+{
+   XCloseDisplay_dlclose_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:dlclose@@GLIBC*
+   ...
+   fun:XCloseDisplay
+   ...
+}
+
+# Observed with SDL_CreateSystemCursor, X11 leaks even when that func fails, see:
+#   https://linux.die.net/man/3/xcreateglyphcursor
+{
+   XCreateGlyphCursor_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:XCreateGlyphCursor
+   ...
+   fun:main
+}
+
+#
+#
+# SDL_image suppressions
+#
+#
+
+#
+#
+# SDL_mixer suppressions
+#
+#
+
+{
+   pulseaudio_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   obj:*libpulse*
+   ...
+}
+
+# Observed after calling MixOpenAudio, many leaks have snd_pcm_open in the
+#   call stack, see:
+#   https://www.alsa-project.org/alsa-doc/alsa-lib/group___p_c_m.html#ga8340c7dc0ac37f37afe5e7c21d6c528b
+# SDL core ALSA_OpenDevice and SDL_mixer dependency mpg123 component libout123
+#   both call snd_pcm_open
+# Mix_CloseAudio/SDL_CloseAudioDevice may not adequately call snd_pcm_close down
+#   the chain
+{
+   snd_pcm_open_possible-reachable
+   Memcheck:Leak
+   match-leak-kinds: possible,reachable
+   ...
+   fun:snd_pcm_open
+   ...
+}
+
+# When SDL opens an audio device, there are also general ALSA lib leaks without
+#   snd_pcm_open in the call stack
+{
+   libasound_possible
+   Memcheck:Leak
+   match-leak-kinds: possible
+   ...
+   obj:*libasound*
+   ...
+}
+
+#
+#
+# SDL_net suppressions
+#
+#
+
+#
+#
+# SDL_rtf suppressions
+#
+#
+
+# SDL2 SDL_rtf uses dlopen, see:
+#   https://github.com/libsdl-org/SDL_rtf/blob/SDL2/acinclude/libtool.m4#L1696
+#   https://www.gnu.org/software/libtool/
+#   https://www.gnu.org/software/automake/faq/autotools-faq.html
+{
+   _dl_open_reachable
+   Memcheck:Leak
+   match-leak-kinds: reachable
+   ...
+   fun:_dl_open
+   ...
+}
+
+#
+#
+# SDL2_ttf suppressions
+#
+#
