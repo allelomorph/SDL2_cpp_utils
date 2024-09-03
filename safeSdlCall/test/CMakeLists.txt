@@ -79,8 +79,8 @@ add_custom_command(TARGET safeSdlCall_tests POST_BUILD
       "--test-action" "memcheck"
       # If SDL libraries and their dependencies are fetched and not found,
       #   during configuration dependencies will register their own tests;
-      #   --tests-regex filters for only sdl2_smart_ptr tests. Would prefer to
-      #   filter by label sdl2_smart_ptr, but labels are not properly imported
+      #   --tests-regex filters for only safeSdlCall tests. Would prefer to
+      #   filter by label safeSdlCall, but labels are not properly imported
       #   from Catch2 tags, see:
       #   - https://github.com/catchorg/Catch2/issues/1590
       "--tests-regex" "SDL"
