@@ -173,6 +173,7 @@ TEST_CASE("SDL_mixer function",
     }
 
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) != 0) {
+        Mix_CloseAudio();
         SKIP(collectErrorQuitSdl("Mix_OpenAudio", Mix_Quit));
     }
 
