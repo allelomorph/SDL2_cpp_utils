@@ -53,19 +53,23 @@ TEST_CASE("SDL_net allocations: SDLNet_SocketSet",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::SocketSet up_socketset{socketset, dltr};
+        unique::SocketSet up_socketset{socketset, dltr};
+        REQUIRE(up_socketset.get() == socketset);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_socketset{ make_unique(socketset) };
+        auto up_socketset{ make_unique(socketset) };
+        REQUIRE(up_socketset.get() == socketset);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::SocketSet sp_socketset{socketset, dltr};
+        shared::SocketSet sp_socketset{socketset, dltr};
+        REQUIRE(sp_socketset.get() == socketset);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_socketset{ make_shared(socketset) };
+        auto sp_socketset{ make_shared(socketset) };
+        REQUIRE(sp_socketset.get() == socketset);
     }
 
     SDLNet_Quit();
@@ -107,19 +111,23 @@ TEST_CASE("SDL_net allocations: TCPsocket",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::TcpSocket up_tcpsocket{tcpsocket, dltr};
+        unique::TcpSocket up_tcpsocket{tcpsocket, dltr};
+        REQUIRE(up_tcpsocket.get() == tcpsocket);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_tcpsocket{ make_unique(tcpsocket) };
+        auto up_tcpsocket{ make_unique(tcpsocket) };
+        REQUIRE(up_tcpsocket.get() == tcpsocket);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::TcpSocket sp_tcpsocket{tcpsocket, dltr};
+        shared::TcpSocket sp_tcpsocket{tcpsocket, dltr};
+        REQUIRE(sp_tcpsocket.get() == tcpsocket);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_tcpsocket{ make_shared(tcpsocket) };
+        auto sp_tcpsocket{ make_shared(tcpsocket) };
+        REQUIRE(sp_tcpsocket.get() == tcpsocket);
     }
 
     SDLNet_Quit();
@@ -152,19 +160,23 @@ TEST_CASE("SDL_net allocations: UDPpacket",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::UdpPacket up_udppacket{udppacket, dltr};
+        unique::UdpPacket up_udppacket{udppacket, dltr};
+        REQUIRE(up_udppacket.get() == udppacket);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_udppacket{ make_unique(udppacket) };
+        auto up_udppacket{ make_unique(udppacket) };
+        REQUIRE(up_udppacket.get() == udppacket);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::UdpPacket sp_udppacket{udppacket, dltr};
+        shared::UdpPacket sp_udppacket{udppacket, dltr};
+        REQUIRE(sp_udppacket.get() == udppacket);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_udppacket{ make_shared(udppacket) };
+        auto sp_udppacket{ make_shared(udppacket) };
+        REQUIRE(sp_udppacket.get() == udppacket);
     }
 
     SDLNet_Quit();

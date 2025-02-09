@@ -46,19 +46,23 @@ TEST_CASE("SDL core allocations: SDL_Cursor",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::Cursor up_cursor{cursor, dltr};
+        unique::Cursor up_cursor{cursor, dltr};
+        REQUIRE(up_cursor.get() == cursor);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_cursor{ make_unique(cursor) };
+        auto up_cursor{ make_unique(cursor) };
+        REQUIRE(up_cursor.get() == cursor);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::Cursor sp_cursor{cursor, dltr};
+        shared::Cursor sp_cursor{cursor, dltr};
+        REQUIRE(sp_cursor.get() == cursor);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_cursor{ make_shared(cursor) };
+        auto sp_cursor{ make_shared(cursor) };
+        REQUIRE(sp_cursor.get() == cursor);
     }
 
     SDL_Quit();
@@ -86,19 +90,23 @@ TEST_CASE("SDL core allocations: SDL_cond",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::CondVar up_cond{cond, dltr};
+        unique::CondVar up_cond{cond, dltr};
+        REQUIRE(up_cond.get() == cond);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_cond{ make_unique(cond) };
+        auto up_cond{ make_unique(cond) };
+        REQUIRE(up_cond.get() == cond);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::CondVar sp_cond{cond, dltr};
+        shared::CondVar sp_cond{cond, dltr};
+        REQUIRE(sp_cond.get() == cond);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_cond{ make_shared(cond) };
+        auto sp_cond{ make_shared(cond) };
+        REQUIRE(sp_cond.get() == cond);
     }
 
     SDL_Quit();
@@ -126,19 +134,23 @@ TEST_CASE("SDL core allocations: SDL_mutex",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::Mutex up_mutex{mutex, dltr};
+        unique::Mutex up_mutex{mutex, dltr};
+        REQUIRE(up_mutex.get() == mutex);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_mutex{ make_unique(mutex) };
+        auto up_mutex{ make_unique(mutex) };
+        REQUIRE(up_mutex.get() == mutex);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::Mutex sp_mutex{mutex, dltr};
+        shared::Mutex sp_mutex{mutex, dltr};
+        REQUIRE(sp_mutex.get() == mutex);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_mutex{ make_shared(mutex) };
+        auto sp_mutex{ make_shared(mutex) };
+        REQUIRE(sp_mutex.get() == mutex);
     }
 
     SDL_Quit();
@@ -174,19 +186,23 @@ TEST_CASE("SDL core allocations: SDL_Renderer",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::Renderer up_renderer{renderer, dltr};
+        unique::Renderer up_renderer{renderer, dltr};
+        REQUIRE(up_renderer.get() == renderer);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_renderer{ make_unique(renderer) };
+        auto up_renderer{ make_unique(renderer) };
+        REQUIRE(up_renderer.get() == renderer);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::Renderer sp_renderer{renderer, dltr};
+        shared::Renderer sp_renderer{renderer, dltr};
+        REQUIRE(sp_renderer.get() == renderer);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_renderer{ make_shared(renderer) };
+        auto sp_renderer{ make_shared(renderer) };
+        REQUIRE(sp_renderer.get() == renderer);
     }
 
     SDL_DestroyWindow(window);
@@ -215,19 +231,23 @@ TEST_CASE("SDL core allocations: SDL_sem",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::Semaphore up_semaphore{semaphore, dltr};
+        unique::Semaphore up_semaphore{semaphore, dltr};
+        REQUIRE(up_semaphore.get() == semaphore);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_semaphore{ make_unique(semaphore) };
+        auto up_semaphore{ make_unique(semaphore) };
+        REQUIRE(up_semaphore.get() == semaphore);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::Semaphore sp_semaphore{semaphore, dltr};
+        shared::Semaphore sp_semaphore{semaphore, dltr};
+        REQUIRE(sp_semaphore.get() == semaphore);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_semaphore{ make_shared(semaphore) };
+        auto sp_semaphore{ make_shared(semaphore) };
+        REQUIRE(sp_semaphore.get() == semaphore);
     }
 
     SDL_Quit();
@@ -255,19 +275,23 @@ TEST_CASE("SDL core allocations: SDL_Surface",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::Surface up_surface{surface, dltr};
+        unique::Surface up_surface{surface, dltr};
+        REQUIRE(up_surface.get() == surface);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_surface{ make_unique(surface) };
+        auto up_surface{ make_unique(surface) };
+        REQUIRE(up_surface.get() == surface);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::Surface sp_surface{surface, dltr};
+        shared::Surface sp_surface{surface, dltr};
+        REQUIRE(sp_surface.get() == surface);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_surface{ make_shared(surface) };
+        auto sp_surface{ make_shared(surface) };
+        REQUIRE(sp_surface.get() == surface);
     }
 
     SDL_Quit();
@@ -313,19 +337,23 @@ TEST_CASE("SDL core allocations: SDL_Texture",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::Texture up_texture{texture, dltr};
+        unique::Texture up_texture{texture, dltr};
+        REQUIRE(up_texture.get() == texture);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_texture{ make_unique(texture) };
+        auto up_texture{ make_unique(texture) };
+        REQUIRE(up_texture.get() == texture);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::Texture sp_texture{texture, dltr};
+        shared::Texture sp_texture{texture, dltr};
+        REQUIRE(sp_texture.get() == texture);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_texture{ make_shared(texture) };
+        auto sp_texture{ make_shared(texture) };
+        REQUIRE(sp_texture.get() == texture);
     }
 
     SDL_DestroyRenderer(renderer);
@@ -355,19 +383,23 @@ TEST_CASE("SDL core allocations: SDL_Window",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::Window up_window{window, dltr};
+        unique::Window up_window{window, dltr};
+        REQUIRE(up_window.get() == window);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_window{ make_unique(window) };
+        auto up_window{ make_unique(window) };
+        REQUIRE(up_window.get() == window);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::Window sp_window{window, dltr};
+        shared::Window sp_window{window, dltr};
+        REQUIRE(sp_window.get() == window);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_window{ make_shared(window) };
+        auto sp_window{ make_shared(window) };
+        REQUIRE(sp_window.get() == window);
     }
 
     SDL_Quit();

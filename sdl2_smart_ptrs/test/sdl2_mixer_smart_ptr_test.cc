@@ -60,19 +60,23 @@ TEST_CASE("SDL_mixer allocations: Mix_Chunk",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::MixChunk up_chunk{chunk, dltr};
+        unique::MixChunk up_chunk{chunk, dltr};
+        REQUIRE(up_chunk.get() == chunk);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_chunk{ make_unique(chunk) };
+        auto up_chunk{ make_unique(chunk) };
+        REQUIRE(up_chunk.get() == chunk);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::MixChunk sp_chunk{chunk, dltr};
+        shared::MixChunk sp_chunk{chunk, dltr};
+        REQUIRE(sp_chunk.get() == chunk);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_chunk{ make_shared(chunk) };
+        auto sp_chunk{ make_shared(chunk) };
+        REQUIRE(sp_chunk.get() == chunk);
     }
 
     Mix_CloseAudio();
@@ -111,19 +115,23 @@ TEST_CASE("SDL_mixer allocations: Mix_Music",
     }
     SECTION("unique:: ctor")
     {
-        [[maybe_unused]] unique::MixMusic up_music{music, dltr};
+        unique::MixMusic up_music{music, dltr};
+        REQUIRE(up_music.get() == music);
     }
     SECTION("make_unique")
     {
-        [[maybe_unused]] auto up_music{ make_unique(music) };
+        auto up_music{ make_unique(music) };
+        REQUIRE(up_music.get() == music);
     }
     SECTION("shared:: ctor")
     {
-        [[maybe_unused]] shared::MixMusic sp_music{music, dltr};
+        shared::MixMusic sp_music{music, dltr};
+        REQUIRE(sp_music.get() == music);
     }
     SECTION("make_shared")
     {
-        [[maybe_unused]] auto sp_music{ make_shared(music) };
+        auto sp_music{ make_shared(music) };
+        REQUIRE(sp_music.get() == music);
     }
 
     Mix_CloseAudio();
