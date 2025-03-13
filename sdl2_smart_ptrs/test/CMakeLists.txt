@@ -1,7 +1,7 @@
 # TBD requires v3.X
 # cmake_minimum_required(VERSION 3.10)
 
-# should set _CATCH_VERSION_MAJOR
+# should set Catch2_VERSION_MAJOR
 include(GetCatch2)
 
 if(NOT COMMAND set_strict_compile_options)
@@ -24,7 +24,7 @@ set_target_properties(sdl2_smart_ptr_tests PROPERTIES
 set_strict_compile_options(sdl2_smart_ptr_tests)
 target_compile_definitions(sdl2_smart_ptr_tests
   PUBLIC
-    _CATCH_VERSION_MAJOR=${_CATCH_VERSION_MAJOR}
+    _CATCH_VERSION_MAJOR=${Catch2_VERSION_MAJOR}
     # quotes are passed into macros (expecting EXAMPLE_DATA_DIR to be string literal)
     EXAMPLE_DATA_DIR="${PROJECT_SOURCE_DIR}/test/example_data/"
   )

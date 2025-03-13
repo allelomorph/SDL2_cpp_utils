@@ -1,7 +1,7 @@
 # TBD requires v3.X
 # cmake_minimum_required(VERSION 3.10)
 
-# should set _CATCH_VERSION_MAJOR
+# should set Catch2_VERSION_MAJOR
 include(GetCatch2)
 # safeSdlCall links SDL2 core and SDL_net; remaining extensions only used in unit testing
 include(GetSDL2_image)
@@ -25,7 +25,7 @@ set_target_properties(safeSdlCall_tests PROPERTIES
 set_strict_compile_options(safeSdlCall_tests)
 target_compile_definitions(safeSdlCall_tests
   PUBLIC
-    _CATCH_VERSION_MAJOR=${_CATCH_VERSION_MAJOR}
+    _CATCH_VERSION_MAJOR=${Catch2_VERSION_MAJOR}
     # quotes are passed into macros (expecting EXAMPLE_DATA_DIR to be string literal)
     EXAMPLE_DATA_DIR="${PROJECT_SOURCE_DIR}/test/example_data/"
   )
