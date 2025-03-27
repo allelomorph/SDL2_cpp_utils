@@ -1,16 +1,15 @@
-#if (_CATCH_VERSION_MAJOR == 3)
-  #include <catch2/catch_version_macros.hpp>                     // CATCH_VERSION_MAJOR
-  #include <catch2/catch_test_macros.hpp>                        // TEST_CASE, SECTION, REQUIRE
-#elif (_CATCH_VERSION_MAJOR == 2)
-  #include <catch2/catch.hpp>
+#include <catch2/catch_version_macros.hpp>               // CATCH_VERSION_MAJOR
+#if (CATCH_VERSION_MAJOR != 3)
+  #error "tests currently only support Catch2 v3.x"
 #endif
+#include <catch2/catch_test_macros.hpp>                  // TEST_CASE, SECTION, REQUIRE
 
 #include "sdl2_smart_ptr.hh"
 
 #include <SDL.h>
 
 #include <string>
-
+//#include <iostream>  // test only
 
 static std::string collectErrorQuitSdl(const std::string& func_name) {
     std::string err { SDL_GetError() };
@@ -170,9 +169,11 @@ TEST_CASE("SDL core allocations: SDL_Renderer",
         FAIL(collectErrorQuitSdl("SDL_CreateWindow"));
     }
 
+//    std::cout << "!!!!!!!!!!!!!!!!!!!!!\n";
     SDL_Renderer* renderer {
         SDL_CreateRenderer(window, -1, 0)
     };
+//    std::cout << "renderer: " << renderer << std::endl;
     if (renderer == nullptr) {
         SDL_DestroyWindow(window);
         FAIL(collectErrorQuitSdl("SDL_CreateRenderer"));

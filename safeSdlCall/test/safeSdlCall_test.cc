@@ -1,11 +1,10 @@
-#if (_CATCH_VERSION_MAJOR == 3)
-  #include <catch2/catch_version_macros.hpp>                     // CATCH_VERSION_MAJOR
-  #include <catch2/catch_test_macros.hpp>                        // TEST_CASE, SECTION, REQUIRE
-  #include <catch2/matchers/catch_matchers.hpp>                  // REQUIRES_*THROW*
-  #include <catch2/matchers/catch_matchers_exception.hpp>        // Catch::Matchers::Message
-#elif (_CATCH_VERSION_MAJOR == 2)
-  #include <catch2/catch.hpp>
+#include <catch2/catch_version_macros.hpp>               // CATCH_VERSION_MAJOR
+#if (CATCH_VERSION_MAJOR != 3)
+  #error "tests currently only support Catch2 v3.x"
 #endif
+#include <catch2/catch_test_macros.hpp>                  // TEST_CASE, SECTION, REQUIRE
+#include <catch2/matchers/catch_matchers.hpp>            // REQUIRES_*THROW*
+#include <catch2/matchers/catch_matchers_exception.hpp>  // Catch::Matchers::Message
 
 #include "safeSdlCall.hh"
 
@@ -35,11 +34,7 @@ static bool sdl_getwindowid_test_func(const Uint32 ret) {
     return (ret == 0);
 }
 
-#if (CATCH_VERSION_MAJOR > 2)
 using Catch::Matchers::Message;
-#else
-using Catch::Message;
-#endif
 
 TEST_CASE("SDL core function",
     "[safeSdlCall][SDL2][core]")

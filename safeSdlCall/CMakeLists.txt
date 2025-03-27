@@ -13,7 +13,15 @@ include(Getcmake_utils)
 
 include(PreventInSourceBuild)
 
-add_subdirectory(src)
+if(NOT COMMAND init_ctest)
+  include(InitCTest)
+endif()
+init_ctest(
+  MEMCHECK
+  MEMCHECK_FAILS_TEST
+  MEMCHECK_GENERATES_SUPPRESSIONS
+  MEMCHECK_SUPPRESSIONS_FILE "${PROJECT_SOURCE_DIR}/test/SDL2.supp"
+)
 
-enable_testing()
+add_subdirectory(src)
 add_subdirectory(test)

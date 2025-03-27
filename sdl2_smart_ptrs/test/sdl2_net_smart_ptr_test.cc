@@ -1,9 +1,8 @@
-#if (_CATCH_VERSION_MAJOR == 3)
-  #include <catch2/catch_version_macros.hpp>                     // CATCH_VERSION_MAJOR
-  #include <catch2/catch_test_macros.hpp>                        // TEST_CASE, SECTION, REQUIRE
-#elif (_CATCH_VERSION_MAJOR == 2)
-  #include <catch2/catch.hpp>
+#include <catch2/catch_version_macros.hpp>               // CATCH_VERSION_MAJOR
+#if (CATCH_VERSION_MAJOR != 3)
+  #error "tests currently only support Catch2 v3.x"
 #endif
+#include <catch2/catch_test_macros.hpp>                  // TEST_CASE, SECTION, REQUIRE
 
 #include "sdl2_net_smart_ptr.hh"
 
